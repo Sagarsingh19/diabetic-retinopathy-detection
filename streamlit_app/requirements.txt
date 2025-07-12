@@ -1,7 +1,0 @@
-streamlit
-tensorflow
-opencv-python
-matplotlib
-numpy
-Pillow
-

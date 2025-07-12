@@ -11,7 +11,7 @@ st.set_page_config(page_title="Diabetic Retinopathy Detection", layout="centered
 
 # Title and intro
 st.title("Diabetic Retinopathy Detection")
-st.image("assets/retina_cover.png", use_container_width=True)
+st.image("streamlit_app/assets/retina_cover.png", use_container_width=True)
 st.markdown(
     "Upload a retina image below. The model will predict the Diabetic Retinopathy stage (0–4) "
     "and display a Grad-CAM heatmap showing where the model is focusing."
@@ -37,7 +37,7 @@ labels = {
 use_sample = st.button("Try Sample Retina Image")
 
 if use_sample:
-    image_path = "assets/sample_retina.jpg"
+    image_path = "streamlit_app/assets/sample_retina.jpg"
     st.image(image_path, caption="Sample Retina Image", use_container_width=True)
 
     # Preprocess for model
