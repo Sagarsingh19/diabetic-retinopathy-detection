@@ -1,7 +1,10 @@
 streamlit
-tensorflow
-opencv-python
-matplotlib
 numpy
+pandas
+matplotlib
+seaborn
+opencv-python-headless
 Pillow
+tensorflow
+scikit-learn
 
