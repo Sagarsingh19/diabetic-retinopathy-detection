@@ -1,0 +1,40 @@
+# Ignore model files
+*.keras
+*.h5
+*.pkl
+*.pt
+*.ckpt
+
+# Ignore datasets and heavy files
+*.zip
+*.tar
+*.tar.gz
+*.csv
+*.npy
+*.npz
+*.json
+
+# Ignore temporary/output files
+*.log
+*.DS_Store
+*.swp
+*.swo
+*.bak
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Streamlit temp uploads (optional)
+.temp_model.keras
+
+# VS Code settings (optional)
+.vscode/
+
+# OS/IDE artifacts
+Thumbs.db
+ehthumbs.db
+desktop.ini
