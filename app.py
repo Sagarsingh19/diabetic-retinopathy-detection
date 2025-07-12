@@ -4,7 +4,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 import os
-from gradcam_utils import generate_and_save_gradcam
+from streamlit_app.gradcam_utils import generate_and_save_gradcam
 
 # Set page config
 st.set_page_config(page_title="Diabetic Retinopathy Detection", layout="centered")
@@ -20,7 +20,7 @@ st.markdown(
 # Load model once
 @st.cache_resource
 def load_retinopathy_model():
-    return load_model('model/model.keras')
+    return load_model('streamlit_app/model/model.keras')
 
 model = load_retinopathy_model()
 last_conv_layer = 'last_conv'  # Update if using EfficientNet later
@@ -33,23 +33,24 @@ labels = {
     3: "Severe",
     4: "Proliferative DR"
 }
-# Option to use a sample image
+
+# Sample image option
 use_sample = st.button("Try Sample Retina Image")
 
 if use_sample:
     image_path = "streamlit_app/assets/sample_retina.jpg"
     st.image(image_path, caption="Sample Retina Image", use_container_width=True)
 
-    # Preprocess for model
+    # Preprocess
     img = Image.open(image_path).convert("RGB").resize((224, 224))
     img_array = np.expand_dims(np.array(img) / 255.0, axis=0)
 
-    # Generate Grad-CAM
+    # Grad-CAM
     gradcam_path, pred_class = generate_and_save_gradcam(
         model=model,
         img_array=img_array,
         last_conv_layer_name=last_conv_layer,
-        save_path="output_image/sample_gradcam.jpg"
+        save_path="streamlit_app/output_image/sample_gradcam.jpg"
     )
 
     st.markdown(
@@ -72,41 +73,37 @@ st.markdown(
 uploaded_file = st.file_uploader("", type=['png', 'jpg', 'jpeg'])
 
 if uploaded_file:
-    # Save uploaded file
-    os.makedirs("uploads", exist_ok=True)
-    image_path = os.path.join("uploads", uploaded_file.name)
+    # Save uploaded image
+    upload_dir = "streamlit_app/uploads"
+    os.makedirs(upload_dir, exist_ok=True)
+    image_path = os.path.join(upload_dir, uploaded_file.name)
     with open(image_path, "wb") as f:
         f.write(uploaded_file.read())
 
-    # Display uploaded image
     st.image(image_path, caption="Uploaded Retina Image", use_container_width=True)
 
-
-    # Preprocess for model
+    # Preprocess
     img = Image.open(image_path).convert("RGB").resize((224, 224))
     img_array = np.expand_dims(np.array(img) / 255.0, axis=0)
 
-    # Generate Grad-CAM + Prediction
+    # Grad-CAM + Prediction
     gradcam_path, pred_class = generate_and_save_gradcam(
         model=model,
         img_array=img_array,
         last_conv_layer_name=last_conv_layer,
-        save_path="output_image/gradcam.jpg"
+        save_path="streamlit_app/output_image/gradcam.jpg"
     )
 
-    # Show prediction
     st.markdown(
         f"<h2 style='color:#2E86AB; font-size:26px;'>Prediction: {labels[pred_class]} (Class {pred_class})</h2>",
         unsafe_allow_html=True
     )
 
-    # Class explanation
     st.markdown(
         "<p style='font-size:16px;'>Classes: 0 = No DR, 1 = Mild, 2 = Moderate, 3 = Severe, 4 = Proliferative DR</p>",
         unsafe_allow_html=True
     )
 
-    # Show Grad-CAM image
     st.image(gradcam_path, caption="Grad-CAM Heatmap", use_container_width=True)
 
 # Footer
@@ -115,10 +112,9 @@ st.markdown(
     """
     <div style='text-align: center; font-size:14px;'>
         Developed by <strong>Sagar Singh</strong><br>
-        <a href='https://github.com/yourusername' target='_blank'>GitHub</a> | 
-        <a href='https://www.linkedin.com/in/yourusername' target='_blank'>LinkedIn</a>
+        <a href='https://github.com/Sagarsingh19' target='_blank'>GitHub</a> | 
+        <a href='https://www.linkedin.com/in/sagarsingh19/' target='_blank'>LinkedIn</a>
     </div>
     """,
     unsafe_allow_html=True
 )
-
